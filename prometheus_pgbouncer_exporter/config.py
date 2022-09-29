@@ -105,12 +105,6 @@ class PgbouncerConfig():
             parsed_dsn['password'] = "****"
         return " ".join([f"{key}={parsed_dsn[key]}" for key in keys])
 
-    def getDsn(self):
-        return self.getKeyValueConnection()
-
-    def getDsnWithMaskedPassword(self):
-        return self.getKeyValueConnection(remove_password=True)
-
     def getConnectTimeout(self):
         return self.config["connect_timeout"] if "connect_timeout" in self.config else 5
 
@@ -137,5 +131,5 @@ class PgbouncerConfig():
         """
 
         # Check DSN
-        if not self.getDsn():
+        if not self.getKeyValueConnection():
             raise Exception("The DSN is required")

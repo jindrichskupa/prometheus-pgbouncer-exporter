@@ -118,7 +118,7 @@ class PgbouncerMetricsCollector():
                 success = False
 
         except Exception as error:
-            logging.getLogger().error("Unable fetch metrics from {dsn}".format(dsn=self.config.getDsnWithMaskedPassword()), extra={"exception": str(error)})
+            logging.getLogger().error("Unable fetch metrics from {dsn}".format(dsn=self.config.getKeyValueConnection(remove_password=True)), extra={"exception": str(error)})
 
             success = False
         finally:
@@ -206,7 +206,7 @@ class PgbouncerMetricsCollector():
 
             return cursor.fetchall()
         except Exception as error:
-            logging.getLogger().error("Unable run query {query} on {dsn}".format(query=query, dsn=self.config.getDsnWithMaskedPassword()), extra={"exception": str(error)})
+            logging.getLogger().error("Unable run query {query} on {dsn}".format(query=query, dsn=self.config.getKeyValueConnection(remove_password=True)), extra={"exception": str(error)})
 
             return False
         finally:

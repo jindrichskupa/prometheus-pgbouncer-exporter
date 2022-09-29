@@ -26,8 +26,8 @@ class TestCLI(unittest.TestCase):
         self.assertEqual(config.getExporterPort(), 1234)
         self.assertEqual(len(config.getPgbouncers()), 1)
 
-        self.assertEqual(config.getPgbouncers()[0].getDsn(), "postgresql://user:password@host:6431/pgbouncer")
-        self.assertEqual(config.getPgbouncers()[0].getDsnWithMaskedPassword(), "postgresql://user:***@host:6431/pgbouncer")
+        self.assertEqual(config.getPgbouncers()[0].getKeyValueConnection(), "host=host port=6431 user=user password=password dbname=pgbouncer connect_timeout=2")
+        self.assertEqual(config.getPgbouncers()[0].getKeyValueConnection(remove_password=True), "host=host port=6431 user=user password=**** dbname=pgbouncer connect_timeout=2")
         self.assertEqual(config.getPgbouncers()[0].getConnectTimeout(), 2)
         self.assertEqual(config.getPgbouncers()[0].getIncludeDatabases(), ["one", "two"])
         self.assertEqual(config.getPgbouncers()[0].getExcludeDatabases(), ["three"])
