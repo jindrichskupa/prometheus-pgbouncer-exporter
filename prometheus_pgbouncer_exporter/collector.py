@@ -214,7 +214,7 @@ class PgbouncerMetricsCollector():
                 cursor.close()
 
     def _createConnection(self):
-        conn = psycopg2.connect(dsn=self.config.getDsn(), connect_timeout=self.config.getConnectTimeout())
+        conn = psycopg2.connect(self.config.getKeyValueConnection())
         conn.set_session(autocommit=True)
 
         return conn

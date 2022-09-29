@@ -1,6 +1,7 @@
 import yaml
 import os
 import re
+from psycopg2.extensions import parse_dsn
 
 # Define the regex used to replace $(ENV_VAR) with ENV_VAR value
 ENV_VAR_MATCHER_PATTERN = re.compile(r'^(.*)\$\(([^\)]+)\)(.*)$')
@@ -86,15 +87,29 @@ class PgbouncerConfig():
         self.config = config
         self.labels = False
 
+    def getKeyValueConnection(self, remove_password=False):
+        keys = ['host', 'port', 'user', 'password', 'dbname', 'connect_timeout']
+        parsed_dsn = {}
+        if self.config.get("dsn"):
+            parsed_dsn = parse_dsn(self.config["dsn"])
+        else:
+            parsed_dsn = {
+                'host': self.config.get("host", "localhost"),
+                'port': self.config.get("port", 6431),
+                'user': self.config.get("user", "pgbouncer"),
+                'password': self.config.get("password", ""),
+                'dbname': self.config.get("dbname", "pgbouncer")
+            }
+        parsed_dsn['connect_timeout'] = self.getConnectTimeout()
+        if remove_password:
+            parsed_dsn['password'] = "****"
+        return " ".join([f"{key}={parsed_dsn[key]}" for key in keys])
+
     def getDsn(self):
-        return self.config["dsn"] if "dsn" in self.config else "postgresql://pgbouncer:@localhost:6431/pgbouncer"
+        return self.getKeyValueConnection()
 
     def getDsnWithMaskedPassword(self):
-        match = DSN_PASSWORD_MASK_PATTERN.match(self.getDsn())
-        if match:
-            return match.group(1) + "***" + match.group(3)
-        else:
-            return self.getDsn()
+        return self.getKeyValueConnection(remove_password=True)
 
     def getConnectTimeout(self):
         return self.config["connect_timeout"] if "connect_timeout" in self.config else 5

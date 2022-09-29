@@ -11,6 +11,11 @@ pgbouncers:
     # Ie. $(PGBOUNCER_PASS) is replaced with the content of "PGBOUNCER_PASS" environment
     #     variable if exist, or left untouched if doesn't exist
     dsn: postgresql://pgbouncer:$(PGBOUNCER_PASS)@localhost:6431/pgbouncer
+    host: localhost
+    port: 6431
+    user: pgbouncer
+    password: $(PGBOUNCER_PASS)
+    dbname: pgbouncer
 
     # The pgbouncer connection timeout in seconds (defaults to 5 seconds)
     connect_timeout: 5
@@ -29,8 +34,13 @@ pgbouncers:
     # in order to export an unique set of metrics.
     extra_labels:
       pool_id: 1
-
-  - dsn: postgresql://pgbouncer:$(PGBOUNCER_PASS)@localhost:6432/pgbouncer
+  -
+    # Or use key/value config - useful for Azure SQL for PostgreSQL
+    host: localhost
+    port: 6432
+    user: pgbouncer
+    password: $(PGBOUNCER_PASS)
+    dbname: pgbouncer
     exclude_databases:
       - pgbouncer
     extra_labels:
