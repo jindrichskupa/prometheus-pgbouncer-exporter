@@ -2,8 +2,13 @@ FROM python:3.6-alpine
 
 # Install dependencies
 COPY . /prometheus-pgbouncer-exporter
+COPY config.docker.yml /etc/pgbouncer-exporter/config.yml
+
 RUN  apk add --update --no-cache postgresql-dev gcc musl-dev && \
      pip install -r /prometheus-pgbouncer-exporter/requirements.txt
 
 WORKDIR /prometheus-pgbouncer-exporter
 RUN python setup.py install
+
+ENTRYPOINT ["python"]
+CMD ["-m", "prometheus_pgbouncer_exporter.cli", "--config", "/etc/pgbouncer-exporter/config.yml"]

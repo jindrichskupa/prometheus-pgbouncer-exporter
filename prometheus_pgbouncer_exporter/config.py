@@ -95,7 +95,7 @@ class PgbouncerConfig():
         else:
             parsed_dsn = {
                 'host': self.config.get("host", "localhost"),
-                'port': self.config.get("port", 6431),
+                'port': self.config.get("port", 5432),
                 'user': self.config.get("user", "pgbouncer"),
                 'password': self.config.get("password", ""),
                 'dbname': self.config.get("dbname", "pgbouncer")
