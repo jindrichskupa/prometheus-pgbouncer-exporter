@@ -1,8 +1,8 @@
 # The host on which the exporter should listen to (defaults to 127.0.0.1)
-exporter_host: $(PGBOUNCER_EXPORTER_HOST)
+exporter_host: $(SERVICE_PGBOUNCER_EXPORTER_HOST)
 
 # The port on which the exporter should listen to (defaults to 9127)
-exporter_port: $(PGBOUNCER_EXPORTER_PORT)
+exporter_port: $(SERVICE_PGBOUNCER_EXPORTER_PORT)
 
 # The list of pgbouncer instances to monitor
 pgbouncers:
